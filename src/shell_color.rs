@@ -36,11 +36,16 @@ pub mod parser {
             .filter(|s| !s.is_empty())
             .collect::<Vec<String>>();
         
-        //let last = tokenized.last();
-        //let last_second = tokenized.get(tokenized.len() - 2);
-        //if last.is_some() &&
-        //    last_second.is_some() {
-        //}
+        if tokenized.len() >= 2 {
+            let last = tokenized.last().map(|s| s.clone());
+
+            if let Some(ref s) = last {
+                if s.starts_with(DELIMITER_START) && !s.ends_with(DELIMITER_END) {
+                    tokenized.remove(tokenized.len() - 1);
+                    tokenized.last_mut().unwrap().push_str(last.unwrap().as_str());
+                }
+            }
+        }
 
         tokenized
     }
@@ -48,7 +53,7 @@ pub mod parser {
      #[test]
     fn test_tokenize() {
         assert_eq!(tokenize(&"r"), vec!["r".to_string()]);
-        //assert_eq!(tokenize(&"r[g"), vec!["r[g".to_string()]);
+        assert_eq!(tokenize(&"r[g"), vec!["r[g".to_string()]);
         assert_eq!(tokenize(&"[r]"), vec!["[r]".to_string()]);
         assert_eq!(tokenize(&"[r]g"), vec!["[r]".to_string(), "g".to_string()]);
         assert_eq!(tokenize(&"[r]g[r]"), vec!["[r]".to_string(), "g".to_string(), "[r]".to_string()]);
