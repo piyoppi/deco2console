@@ -5,6 +5,10 @@ use std::env;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
+    let source = &args[1];
+    let colored = parser::convert(source);
+    
+    println!("{}", colored);
 
-    parser::convert(&args[1]);
+    parser::convert(source);
 }
