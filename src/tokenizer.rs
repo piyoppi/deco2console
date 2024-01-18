@@ -3,7 +3,7 @@ pub mod tokenizer {
     const DELIMITER_END: &str = &"]";
 
     #[derive(PartialEq, Debug, Clone)]
-    enum TokenKind {
+    pub enum TokenKind {
         Element,
         Text,
     }

@@ -1,4 +1,7 @@
 pub mod shell_color {
+    use std::collections::HashMap;
+    use crate::token_converter::token_converter;
+
     const RED: &str = "\x1b[31m";
     const GREEN: &str = "\x1b[32m";
     const YELLOW: &str = "\x1b[33m";
@@ -14,24 +17,25 @@ pub mod shell_color {
     const FILLED_CYAN: &str = "\x1b[46m";
     const FILLED_WHITE: &str = "\x1b[47m";
     const RESET: &str = "\x1b[0m";
-  
-    pub fn convert_color(token: &str) -> Option<String> {
-        match &token[..] {
-            "red" => Some(RED.to_string()),
-            "green" => Some(GREEN.to_string()),
-            "yellow" => Some(YELLOW.to_string()),
-            "blue" => Some(BLUE.to_string()),
-            "cyan" => Some(CYAN.to_string()),
-            "white" => Some(WHITE.to_string()),
-            "reset" => Some(RESET.to_string()),
-            "fred" => Some(FILLED_RED.to_string()),
-            "fgreen" => Some(FILLED_GREEN.to_string()),
-            "fyellow" => Some(FILLED_YELLOW.to_string()),
-            "fblue" => Some(FILLED_BLUE.to_string()),
-            "fcyan" => Some(FILLED_CYAN.to_string()),
-            "fwhite" => Some(FILLED_WHITE.to_string()),
-            "fblack" => Some(FILLED_BLACK.to_string()),
-            _ => None,
-        }
+    
+    pub fn get_converter() -> HashMap<String, Box<crate::token_converter::token_converter::Converter>> {
+        vec![
+            ("red",     token_converter::boxed_fn(|_| Some(RED.to_string()))),
+            ("green",   token_converter::boxed_fn(|_| Some(GREEN.to_string()))),
+            ("yellow",  token_converter::boxed_fn(|_| Some(YELLOW.to_string()))),
+            ("blue",    token_converter::boxed_fn(|_| Some(BLUE.to_string()))),
+            ("cyan",    token_converter::boxed_fn(|_| Some(CYAN.to_string()))),
+            ("white",   token_converter::boxed_fn(|_| Some(WHITE.to_string()))),
+            ("reset",   token_converter::boxed_fn(|_| Some(RESET.to_string()))),
+            ("fred",    token_converter::boxed_fn(|_| Some(FILLED_RED.to_string()))),
+            ("fgreen",  token_converter::boxed_fn(|_| Some(FILLED_GREEN.to_string()))),
+            ("fyellow", token_converter::boxed_fn(|_| Some(FILLED_YELLOW.to_string()))),
+            ("fblue",   token_converter::boxed_fn(|_| Some(FILLED_BLUE.to_string()))),
+            ("fcyan",   token_converter::boxed_fn(|_| Some(FILLED_CYAN.to_string()))),
+            ("fwhite",  token_converter::boxed_fn(|_| Some(FILLED_WHITE.to_string()))),
+            ("fblack",  token_converter::boxed_fn(|_| Some(FILLED_BLACK.to_string()))),
+        ].into_iter()
+         .map(|(key, converter)| (key.to_string(), converter))
+         .collect()
     }
 }
